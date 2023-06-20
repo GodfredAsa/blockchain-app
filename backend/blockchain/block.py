@@ -13,6 +13,11 @@ GENESIS_DATA = {
 }
 
 
+def raise_exception(message: str) -> Exception :
+    raise Exception(message)
+
+
+
 
 class Block:
     """
@@ -66,13 +71,50 @@ class Block:
         if (new_timestamp - last_block.timestamp) < MINE_RATE:
             return last_block.difficulty + 1
         return last_block.difficulty - 1 if last_block.difficulty > 1 else 1
+    
+    @staticmethod
+    def is_valid_block(last_block: 'Block', block: 'Block'):
+       
+        """ 
+        Validate a block enforcing the following roles 
+        - block must have proper last hashed referenced.
+        - Block must meet proof of work requirement
+        - Difficulty must only adjust by 1
+        - the block hash must be a valid combination of the block fields  
+        """
+
+
+        if block.last_hash != last_block.hash:
+            raise_exception('The block last_hash must be correct')
+            # raise Exception('the block last_hash must be correct')
+        if hex_to_binary(block.hash)[: block.difficulty] != '0' * block.difficulty:
+           raise_exception('Proof of work requirement not met')
+
+        if abs(last_block.difficulty - block.difficulty) > 1:
+            raise_exception('Block difficulty must only adjust by 1')
+
+        reconstructed_hash = crypto_hash(
+            block.timestamp,
+            block.last_hash,
+            block.data,
+            block.difficulty,
+            block.nonce
+        )
+
+        if block.hash != reconstructed_hash:
+            raise_exception('The block hash must be correct')
+
 
 
 def main():
-
     genesis_block = Block.genesis()
-    block = Block.mine_block(genesis_block, 'beautiful')
-    print(block)
+    bad_block  = Block.mine_block(genesis_block, 'foo')
+    bad_block.last_hash = 'evil_data'
+
+    try:
+        Block.is_valid_block(genesis_block, bad_block)
+    except Exception as e:
+        print(f'is_valid_block: {e}')
 
 if __name__=='__main__':
     main()

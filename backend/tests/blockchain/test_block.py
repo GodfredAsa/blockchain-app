@@ -2,6 +2,7 @@ from backend.blockchain.block import Block, GENESIS_DATA
 import time 
 from backend.config import MINE_RATE, SECONDS
 from backend.utils.hex_to_binary import hex_to_binary
+import pytest
 
 def test_mine_block():
     last_block = Block.genesis()
@@ -49,3 +50,40 @@ def test_genesis():
     # Better way of testing the data in the generated block 
     for key, value in GENESIS_DATA.items () :
         getattr(genesis, key) == value
+
+@pytest.fixture
+def last_block() -> 'Block':
+    return Block.genesis()
+
+@pytest.fixture
+def block(last_block)-> 'Block':
+    return Block.mine_block(last_block, 'test_data')
+
+def test_is_valid_block(last_block, block):
+    Block.is_valid_block(last_block, block)
+
+# TODO CORRECT THIS TESTS IMPLEMENTATION IN THE MAIN CODE
+def test_is_valid_block_with_bad_last_hash(last_block: 'Block', block: 'Block'):
+    block.last_hash = 'bad_hash'
+
+    with pytest.raises(Exception, match='The block last_hash must be correct') as e:
+        Block.is_valid_block(last_block, block)
+       
+def test_is_valid_block_bad_proof_of_work(last_block, block: 'Block'):
+    block.hash = 'fff'
+    with pytest.raises(Exception, match='Proof of work requirement not met') as e:
+        Block.is_valid_block(last_block, block)
+
+
+def test_is_valid_block_jumped_difficulty(last_block: 'Block', block: 'Block'):
+    jumped_difficulty = 10
+    block.difficulty = jumped_difficulty
+    block.hash = f'{"0" * jumped_difficulty}111abc'
+    with pytest.raises(Exception, match='Block difficulty must only adjust by 1') as e:
+        Block.is_valid_block(last_block, block)
+
+
+def test_is_valid_block_bad_block_hash(last_block, block: 'Block'):
+    block.hash = '00000000000000abbbbabc'
+    with pytest.raises(Exception, match='The block hash must be correct') as e:
+        Block.is_valid_block(last_block, block)

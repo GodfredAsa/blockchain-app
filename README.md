@@ -23,3 +23,6 @@ Activate the virtual environment as described above
 ```python3 -m backend.utils.hex_to_binary```
 
 
+#### Chain Validation 
+1. its the concept of inspecting a blockchain has been constructed correctly 
+2. chain replacement is the process when an old block is replaced with a new block which mostly longer than the previous. Chain replacement is necessary a block should be built from other blocks. when multiple blocks interact with each other its called a blockchain network.
