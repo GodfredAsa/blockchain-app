@@ -103,8 +103,12 @@ class Block:
 
         if block.hash != reconstructed_hash:
             raise_exception('The block hash must be correct')
-
-
+            
+    def to_json(self):
+        """
+        Serialize a block to a dictionary of its attributes.
+        """
+        return self.__dict__
 
 def main():
     genesis_block = Block.genesis()
@@ -116,5 +120,6 @@ def main():
     except Exception as e:
         print(f'is_valid_block: {e}')
 
-if __name__=='__main__':
+
+if __name__ == '__main__':
     main()

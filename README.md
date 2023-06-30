@@ -26,3 +26,10 @@ Activate the virtual environment as described above
 #### Chain Validation 
 1. its the concept of inspecting a blockchain has been constructed correctly 
 2. chain replacement is the process when an old block is replaced with a new block which mostly longer than the previous. Chain replacement is necessary a block should be built from other blocks. when multiple blocks interact with each other its called a blockchain network.
+
+***RUN THE SERVER***
+CD into the the root directory 
+```python -m backend.app```
+
+***Publisher Sbscriber functionality using pubnub***
+```pubnub.com```

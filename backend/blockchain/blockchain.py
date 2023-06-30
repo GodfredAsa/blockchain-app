@@ -52,6 +52,11 @@ class Blockchain:
         self.chain = chain
 
 
+    def to_json(self):
+        """
+        Serialize the blockchain into a list of blocks.
+        """
+        return [block.to_json() for block in self.chain ]
 
 def main():
     blockchain = Blockchain()
