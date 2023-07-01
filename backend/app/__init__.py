@@ -29,7 +29,9 @@ def route_blockchain() -> List['Block']:
 def route_blockchain_mine():
     transaction_data = 'stubbed_transaction_data'
     blockchain.add_block(transaction_data)
-    return jsonify(blockchain.chain[-1].to_json()), status.CREATED
+    block = blockchain.chain[-1]
+    pubsub.broadcast_block(block)
+    return jsonify(block.to_json()), status.CREATED
 
 
 # SETTING RANDOM PORTS BETWEEN 5001-5999. BELOW IS THE COMMAND FOR RUNNING ANOTHER INSTANCE 
