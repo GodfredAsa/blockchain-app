@@ -33,3 +33,9 @@ CD into the the root directory
 
 ***Publisher Sbscriber functionality using pubnub***
 ```pubnub.com```
+
+***COMMAND FOR RUNNING ANOTHER INSTANCE |PEER ***
+```Activate virtual env```
+* First Instance: ```python3 -m backend.app```
+* Second Instance: ```export PEER=True && python3 -m backend.app```
+* Third Instance: ```export PEER=True && python3 -m backend.app```
