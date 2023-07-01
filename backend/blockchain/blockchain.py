@@ -1,5 +1,6 @@
 from backend.blockchain.block import Block, raise_exception
 from collections import OrderedDict
+from typing import List
 class Blockchain:
     """Blockchain: a public ledger of transactions.
     Implemented as a list of blocks - data sets of transactions
@@ -57,6 +58,17 @@ class Blockchain:
         Serialize the blockchain into a list of blocks.
         """
         return [block.to_json() for block in self.chain ]
+    @staticmethod
+    def from_json(chain_json) -> List['Blockchain']:
+        """
+        Deserialize a list of serialized blocks into a Blockchain instance.
+        Returns a chain lists of block instances 
+        """
+        blockchain = Blockchain()
+        blockchain.chain = list(map(lambda block_json: Block.from_json(block_json), chain_json))
+        return blockchain
+        
+
 
 def main():
     blockchain = Blockchain()

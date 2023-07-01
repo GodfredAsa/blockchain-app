@@ -32,11 +32,8 @@ class Block:
         self.difficulty = difficulty
         self.nonce = nonce
 
-
     def __repr__(self) -> None:
         return f'<Block timestamp: {self.timestamp}, ast_hash: {self.last_hash}, hash: {self.hash}, data: {self.data}, difficulty: {self.difficulty}, nonce: {self.nonce}>'
-
-
 
     @staticmethod
     def mine_block(last_block: 'Block', data):
@@ -109,6 +106,14 @@ class Block:
         Serialize a block to a dictionary of its attributes.
         """
         return self.__dict__
+    
+    @staticmethod
+    def from_json(block_json):
+        """
+        Deserialize a block's json representation back into a block instance
+        """
+        return Block(**block_json)
+         
 
 def main():
     genesis_block = Block.genesis()
