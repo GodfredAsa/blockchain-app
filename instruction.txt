@@ -36,3 +36,16 @@ GENERAL PROCEDURE FOR CRYPTOCURRENCY
 - Adding digital Wallets
 - Signatures and Verification
 - creating transactions
+
+================== TRANSACTION POOL  ===========================
+Transaction Pool is a data structure that collects all the various transaction created wallets in a network. 
+The implementation could be anything you like, ie an array or a map with key value structure.
+RULES OF A TRANSACTION 
+- Unique set of transaction of objects
+- Update existing stored transactions 
+- Rewrite multiple transactions 
+
+NB: Every node in the network is going to have its unique instance of the transaction pool with the key making sure all transaction pools are synchronised 
+When a transaction is update, modified or new added its then broadcasted to the new network.
+It will also enable miners to get an accurate lists of the recent transactions to include in the new block.
+

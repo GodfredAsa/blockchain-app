@@ -1,5 +1,7 @@
 import time
 import uuid
+
+from backend.wallet.transaction_pool import TransactionPool
 from backend.wallet.wallet import  Wallet
 
 
@@ -8,10 +10,10 @@ class Transaction:
     Document of an exchange in currency from a sender to one or more recipients
     """
 
-    def __init__(self, sender_wallet, recipient, amount):
-        self.id = str(uuid.uuid4())[:8]
-        self.output = self.create_output(sender_wallet, recipient, amount)
-        self.input = self.create_input(sender_wallet, self.output)
+    def __init__(self, sender_wallet=None, recipient=None, amount=None, id=None, output=None, input=None):
+        self.id = id or str(uuid.uuid4())[:8]
+        self.output = output or self.create_output(sender_wallet, recipient, amount)
+        self.input = input or self.create_input(sender_wallet, self.output)
 
     @staticmethod
     def create_output(sender_wallet, recipient, amount):
@@ -62,6 +64,11 @@ class Transaction:
         return self.__dict__
 
     @staticmethod
+    def from_json(transaction_json):
+        """Deserialize transaction's json representation back into instance of Transaction"""
+        return Transaction(**transaction_json)
+
+    @staticmethod
     def is_valid_transaction(transaction: 'Transaction'):
         """
         Validate and raise exception for invalid transaction
@@ -78,6 +85,11 @@ class Transaction:
 def main():
     transaction = Transaction(Wallet(), 'recipient', 15)
     print(f'transaction__dict__: {transaction.__dict__}')
+
+    transaction_json = transaction.to_json()
+    restored_transaction = Transaction.from_json(transaction_json)
+
+    print(f'restored_transaction__dict__: {restored_transaction.__dict__}')
 
 
 if __name__ == '__main__':
