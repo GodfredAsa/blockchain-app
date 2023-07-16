@@ -57,6 +57,10 @@ class Transaction:
         self.output[sender_wallet.address] = self.output[sender_wallet.address] - amount
         self.input = self.create_input(sender_wallet, self.output)
 
+    def to_json(self):
+        """Serialize transaction"""
+        return self.__dict__
+
     @staticmethod
     def is_valid_transaction(transaction: 'Transaction'):
         """
@@ -69,6 +73,7 @@ class Transaction:
 
         if not Wallet.verify_signature(transaction.input['public_key'], transaction.output, transaction.input['signature']):
             raise Exception('Invalid signature')
+
 
 def main():
     transaction = Transaction(Wallet(), 'recipient', 15)
